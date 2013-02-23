@@ -11,22 +11,22 @@ source code: https://github.com/SuRaMoN/simplexmlreader/blob/master/examples/sim
 
 ```php
 $xml = SimpleXmlReader::openFromString('
- <root>
-   <animal type="cat">
-     <hastail>yes</hastail>
-  </animal>
-	<animal type="dog">
-	   <hastail>yes</hastail>
-	</animal>
-	<animal type="kakariki">
-	   <hastail>no</hastail>
-	</animal>
- </root>
+	 <root>
+		<animal type="cat">
+			<hastail>yes</hastail>
+		</animal>
+		<animal type="dog">
+			<hastail>yes</hastail>
+		</animal>
+		<animal type="kakariki">
+			<hastail>no</hastail>
+		</animal>
+	</root>
 ');
 
 foreach($xml->path('root/animal') as $animal) {
-   // $animal is of type SimpleXMLElelent
-   // only the current iterated $animal is in memory, so huge xml files can be read, without much memory consumption
+	// $animal is of type SimpleXMLElelent
+	// only the current iterated $animal is in memory, so huge xml files can be read, without much memory consumption
 	echo "A {$animal->attributes()->type} has a tail? {$animal->hastail}!\n";
 } 
 ```
