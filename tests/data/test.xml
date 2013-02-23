@@ -1,0 +1,20 @@
+<root>
+	<matchparent>
+		<nonmatch />
+	</matchparent>
+	<matchparent>
+		<matchclosedsiblinga />
+		<matchsiblingb></matchsiblingb>
+		<match>match1</match>
+		<matchsiblingc>fail</matchsiblingc>
+	</matchparent>
+	<a>
+		<aa>fail</aa>
+	</a>
+	<matchparent>
+		<match>match2</match>
+		<match>
+			<child>match3</child>
+		</match>
+	</matchparent>
+</root>
