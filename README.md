@@ -1,4 +1,4 @@
-simplexmlreader
+SimpleXmlReader
 ===============
 
 Interface for the PHP XML Pull parser XMLReader that adds super-simplified xpath functionality. This is ideal for reading huge xml files without the memory costs of other xml libraries (eg SImpleXMLElement).
