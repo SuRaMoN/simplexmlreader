@@ -9,7 +9,7 @@ use PHPUnit_Framework_TestCase;
 class SimpleXmlReaderTest extends PHPUnit_Framework_TestCase
 {
 	/** @test */
-	public function testBasicFunctionality()
+	public function testOpenFile()
 	{
 		$xml = SimpleXmlReader::openXML(__DIR__ . '/data/test.xml');
 		$matches = iterator_to_array($xml->path('root/matchparent/match'));

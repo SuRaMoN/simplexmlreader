@@ -20,15 +20,23 @@ class ExceptionThrowingXMLReader extends XMLReader {
 	}
 
 	public function tryRead() {
-		return @parent::read();
+		return parent::read();
 	}
 
-	public function next() {
-		return static::ensureSuccess(parent::next());
+	public function next($localname = null) {
+		if($localname === null) {
+			return static::ensureSuccess(parent::next());
+		} else {
+			return static::ensureSuccess(parent::next($localname));
+		}
 	}
 
-	public function tryNext() {
-		return @parent::next();
+	public function tryNext($localname = null) {
+		if($localname === null) {
+			return parent::next();
+		} else {
+			return parent::next($localname);
+		}
 	}
 
 	public function open($URI, $encoding = null, $options = 0) {
