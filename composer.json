@@ -1,0 +1,19 @@
+
+{
+	"name": "SuRaMoN/itertools",
+	"description": "The power of SimpleXmlElement, combined with the resource-friendliness of XmlReader",
+	"type": "library",
+	"homepage": "https://github.com/SuRaMoN/SimpleXmlReader",
+	"license": "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE",
+	"authors": [
+		{
+			"name": "SuRaMoN",
+			"homepage": "https://github.com/SuRaMoN"
+		}
+	],
+	"require": { "php": ">=5.3" },
+	"autoload": {
+		"files": [ "src/SimpleXmlReader/autoload.php" ]
+	}
+}
+
