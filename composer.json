@@ -1,6 +1,6 @@
 
 {
-	"name": "SuRaMoN/itertools",
+	"name": "SuRaMoN/SimpleXmlReader",
 	"description": "The power of SimpleXmlElement, combined with the resource-friendliness of XmlReader",
 	"type": "library",
 	"homepage": "https://github.com/SuRaMoN/SimpleXmlReader",
