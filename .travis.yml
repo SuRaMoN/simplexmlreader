@@ -1,5 +1,6 @@
 
 language: php
+script: phpunit --configuration phpunit-full.xml.dist
 php:
   - 5.3
   - 5.4
