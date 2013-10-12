@@ -8,8 +8,8 @@ use Iterator;
 use DOMDocument;
 
 
-class SimpleXmlReaderIterator implements Iterator {
-
+class PathIterator implements Iterator
+{
 	const IS_MATCH = 'IS_MATCH';
 	const DESCENDANTS_COULD_MATCH = 'DESCENDANTS_COULD_MATCH';
 	const DESCENDANTS_CANT_MATCH = 'DESCENDANTS_CANT_MATCH';
@@ -23,7 +23,8 @@ class SimpleXmlReaderIterator implements Iterator {
 	protected $isValid;
 	protected $returnType;
 
-	public function __construct(SimpleXMLReader $reader, $path, $returnType) {
+	public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType)
+	{
 		$this->reader = $reader;
 		$this->searchPath = $path;
 		$this->searchCrumbs = explode('/', $path);
@@ -34,15 +35,18 @@ class SimpleXmlReaderIterator implements Iterator {
 		$this->returnType = $returnType;
 	}
 
-	public function current() {
+	public function current()
+	{
 		return $this->currentDomExpansion;
 	}
 
-	public function key() {
+	public function key()
+	{
 		return $this->matchCount;
 	}
 
-	public function next() {
+	public function next()
+	{
 		$this->isValid = $this->tryGotoNextIterationElement();
 
 		if($this->isValid) {
@@ -51,7 +55,8 @@ class SimpleXmlReaderIterator implements Iterator {
 		}
 	}
 
-	public function rewind() {
+	public function rewind()
+	{
 		$this->rewindCount += 1;
 		if($this->rewindCount > 1) {
 			throw new Exception('Multiple rewinds not supported');
@@ -59,22 +64,33 @@ class SimpleXmlReaderIterator implements Iterator {
 		$this->next();
 	}
 
-	public function valid() {
+	public function valid()
+	{
 		return $this->isValid;
 	}
 
-	protected function getXMLObject() {
+	protected function getXMLObject()
+	{
 		switch($this->returnType) {
 			case SimpleXMLReader::RETURN_DOM:
 				return $this->reader->expand();
+
+			case SimpleXMLReader::RETURN_INNER_XML_STRING:
+				return $this->reader->readInnerXML();
+
+			case SimpleXMLReader::RETURN_OUTER_XML_STRING:
+				return $this->reader->readOuterXML();
+
 			case SimpleXMLReader::RETURN_SIMPLE_XML:
 				return simplexml_import_dom($this->reader->expand(new DOMDocument('1.0')));
+
 			default:
 				throw new Exception("Unknow return type: {$this->returnType}");
 		}
 	}
 
-	protected function pathIsMatching() {
+	protected function pathIsMatching()
+	{
 		if($this->crumbs == $this->searchCrumbs) {
 			return self::IS_MATCH;
 		} else if(array_slice($this->searchCrumbs, 0, count($this->crumbs)) == $this->crumbs) {
@@ -84,7 +100,8 @@ class SimpleXmlReaderIterator implements Iterator {
 		}
 	}
 
-	public function tryGotoNextIterationElement() {
+	public function tryGotoNextIterationElement()
+	{
 		$r = $this->reader;
 
 		if($r->nodeType == XMLReader::NONE) {
