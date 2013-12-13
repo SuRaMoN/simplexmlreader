@@ -33,5 +33,29 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
 		$matches = iterator_to_array($xml->path('root/matchparent/match', SimpleXmlReader::RETURN_INNER_XML_STRING));
 		$this->assertEquals('<child>match3</child>', preg_replace('/\s/', '', (string) $matches[2]));
 	}
+
+	/** @test */
+	public function testEmptyXmlShortTagNotiation()
+	{
+		$xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/empty1.xml');
+		$matches = iterator_to_array($xml->path('root/matchparent/match'));
+		$this->assertCount(0, $matches);
+	}
+
+	/** @test */
+	public function testEmptyXmlOpenCloseTagNotiation()
+	{
+		$xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/empty2.xml');
+		$matches = iterator_to_array($xml->path('root/matchparent/match'));
+		$this->assertCount(0, $matches);
+	}
+
+	/** @test */
+	public function testEmptyXmlWithHeader()
+	{
+		$xml = SimpleXmlReader::openGzippedXML(__DIR__ . '/testdata/empty3.xml.gz');
+		$matches = iterator_to_array($xml->path('root/matchparent/match'));
+		$this->assertCount(0, $matches);
+	}
 }
 
