@@ -57,5 +57,14 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
 		$matches = iterator_to_array($xml->path('root/matchparent/match'));
 		$this->assertCount(0, $matches);
 	}
+
+	/** @test */
+	public function testAutoOpen()
+	{
+		$xml = SimpleXmlReader::autoOpenXML(__DIR__ . '/testdata/empty3.xml.gz');
+		$this->assertCount(0, iterator_to_array($xml->path('root/matchparent/match')));
+		$xml = SimpleXmlReader::autoOpenXML(__DIR__ . '/testdata/empty2.xml');
+		$this->assertCount(0, iterator_to_array($xml->path('root/matchparent/match')));
+	}
 }
 
