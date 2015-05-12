@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleXMLReader;
+namespace SimpleXmlReader;
 
 use XMLReader;
 use Exception;
