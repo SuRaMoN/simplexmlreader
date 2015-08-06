@@ -19,6 +19,14 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function testStar()
+    {
+        $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/simpletest.xml');
+        $matches = iterator_to_array($xml->path('root/*/match'));
+        $this->assertEquals(3, count($matches));
+    }
+
+    /** @test */
     public function testPathOuterXml()
     {
         $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/simpletest.xml');

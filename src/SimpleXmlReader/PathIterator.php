@@ -91,12 +91,20 @@ class PathIterator implements Iterator
 
     protected function pathIsMatching()
     {
-        if($this->crumbs == $this->searchCrumbs) {
-            return self::IS_MATCH;
-        } else if(array_slice($this->searchCrumbs, 0, count($this->crumbs)) == $this->crumbs) {
-            return self::DESCENDANTS_COULD_MATCH;
-        } else {
+        if (count($this->crumbs) > count($this->searchCrumbs)) {
             return self::DESCENDANTS_CANT_MATCH;
+        }
+        foreach ($this->crumbs as $i => $crumb) {
+            $searchCrumb = $this->searchCrumbs[$i];
+            if ($searchCrumb == $crumb || $searchCrumb == '*') {
+                continue;
+            }
+            return self::DESCENDANTS_CANT_MATCH;
+        }
+        if (count($this->crumbs) == count($this->searchCrumbs)) {
+            return self::IS_MATCH;
+        } else {
+            return self::DESCENDANTS_COULD_MATCH;
         }
     }
 
