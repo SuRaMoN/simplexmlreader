@@ -103,9 +103,8 @@ class PathIterator implements Iterator
         }
         if (count($this->crumbs) == count($this->searchCrumbs)) {
             return self::IS_MATCH;
-        } else {
-            return self::DESCENDANTS_COULD_MATCH;
         }
+        return self::DESCENDANTS_COULD_MATCH;
     }
 
     public function tryGotoNextIterationElement()
@@ -120,7 +119,7 @@ class PathIterator implements Iterator
             if(!$r->tryNext()) { return false; }
         }
 
-        for(;'ever';) {
+        while (true) {
 
             // search for open tag
             while($r->nodeType != XMLReader::ELEMENT) {
@@ -134,11 +133,11 @@ class PathIterator implements Iterator
 
                 case self::DESCENDANTS_COULD_MATCH:
                     if(!$r->tryRead()) { return false; }
-                    continue;
+                    continue 2;
 
                 case self::DESCENDANTS_CANT_MATCH:
                     if(!$r->tryNext()) { return false; }
-                    continue;
+                    continue 2;
 
                 case self::IS_MATCH:
                     return true;
