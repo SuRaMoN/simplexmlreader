@@ -4,7 +4,6 @@ namespace SimpleXmlReader;
 
 use PHPUnit_Framework_TestCase;
 
-
 class PathIteratorTest extends PHPUnit_Framework_TestCase
 {
     /** @test */
@@ -19,7 +18,7 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function testStar()
+    public function testStart()
     {
         $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/simpletest.xml');
         $matches = iterator_to_array($xml->path('root/*/match'));
@@ -75,4 +74,3 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(0, iterator_to_array($xml->path('root/matchparent/match')));
     }
 }
-

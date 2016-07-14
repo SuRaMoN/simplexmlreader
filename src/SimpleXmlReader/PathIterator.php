@@ -7,7 +7,6 @@ use Exception;
 use Iterator;
 use DOMDocument;
 
-
 class PathIterator implements Iterator
 {
     const IS_MATCH = 'IS_MATCH';
@@ -49,7 +48,7 @@ class PathIterator implements Iterator
     {
         $this->isValid = $this->tryGotoNextIterationElement();
 
-        if($this->isValid) {
+        if ($this->isValid) {
             $this->matchCount += 1;
             $this->currentDomExpansion = $this->getXMLObject();
         }
@@ -58,7 +57,7 @@ class PathIterator implements Iterator
     public function rewind()
     {
         $this->rewindCount += 1;
-        if($this->rewindCount > 1) {
+        if ($this->rewindCount > 1) {
             throw new Exception('Multiple rewinds not supported');
         }
         $this->next();
@@ -71,7 +70,7 @@ class PathIterator implements Iterator
 
     protected function getXMLObject()
     {
-        switch($this->returnType) {
+        switch ($this->returnType) {
             case SimpleXMLReader::RETURN_DOM:
                 return $this->reader->expand();
 
@@ -111,32 +110,31 @@ class PathIterator implements Iterator
     {
         $r = $this->reader;
 
-        if($r->nodeType == XMLReader::NONE) {
+        if ($r->nodeType == XMLReader::NONE) {
             // first time we do a read from the xml
-            if(!$r->tryRead()) { return false; }
+            if (! $r->tryRead()) { return false; }
         } else {
             // if we have already had a match
-            if(!$r->tryNext()) { return false; }
+            if (! $r->tryNext()) { return false; }
         }
 
         while (true) {
-
             // search for open tag
-            while($r->nodeType != XMLReader::ELEMENT) {
-                if(!$r->tryRead()) { return false; }
+            while ($r->nodeType != XMLReader::ELEMENT) {
+                if (! $r->tryRead()) { return false; }
             }
 
             // fill crumbs
             array_splice($this->crumbs, $r->depth, count($this->crumbs), array($r->name));
 
-            switch($this->pathIsMatching()) {
+            switch ($this->pathIsMatching()) {
 
                 case self::DESCENDANTS_COULD_MATCH:
-                    if(!$r->tryRead()) { return false; }
+                    if (! $r->tryRead()) { return false; }
                     continue 2;
 
                 case self::DESCENDANTS_CANT_MATCH:
-                    if(!$r->tryNext()) { return false; }
+                    if (! $r->tryNext()) { return false; }
                     continue 2;
 
                 case self::IS_MATCH:
@@ -145,4 +143,3 @@ class PathIterator implements Iterator
         }
     }
 }
- 

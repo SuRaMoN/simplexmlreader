@@ -2,7 +2,6 @@
 
 namespace SimpleXmlReader;
 
-
 class SimpleXmlReader
 {
     const RETURN_DOM = 'RETURN_DOM';
@@ -19,7 +18,7 @@ class SimpleXmlReader
 
     public static function autoOpenXML($path, $encoding = 'UTF-8', $options = 0)
     {
-        if(strtolower(substr($path, -3)) == '.gz') {
+        if (strtolower(substr($path, -3)) == '.gz') {
             return self::openGzippedXML($path, $encoding, $options);
         } else {
             return self::openXML($path, $encoding, $options);
@@ -50,4 +49,3 @@ class SimpleXmlReader
         return new PathIterator($this->xmlReader, $path, $returnType);
     }
 }
-

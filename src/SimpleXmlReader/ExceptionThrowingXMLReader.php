@@ -5,7 +5,6 @@ namespace SimpleXmlReader;
 use Exception;
 use XMLReader;
 
-
 class ExceptionThrowingXMLReader extends XMLReader
 {
     public function open($URI, $encoding = null, $options = 0)
@@ -15,7 +14,7 @@ class ExceptionThrowingXMLReader extends XMLReader
 
     static protected function ensureSuccess($returnValue, $operation)
     {
-        if(! $returnValue) {
+        if (! $returnValue) {
             throw new Exception("Error while performing XMLReader::$operation");
         }
         return $returnValue;
@@ -33,7 +32,7 @@ class ExceptionThrowingXMLReader extends XMLReader
 
     public function next($localName = null)
     {
-        if(null === $localName) {
+        if (null === $localName) {
             return static::ensureSuccess(parent::next(), 'next');
         } else {
             return static::ensureSuccess(parent::next($localName), 'next');
@@ -42,11 +41,10 @@ class ExceptionThrowingXMLReader extends XMLReader
 
     public function tryNext($localName = null)
     {
-        if(null === $localName) {
+        if (null === $localName) {
             return parent::next();
         } else {
             return parent::next($localName);
         }
     }
 }
- 
