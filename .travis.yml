@@ -4,4 +4,5 @@ script: phpunit --configuration phpunit-full.xml.dist
 php:
   - 5.3
   - 5.4
-
+  - 5.6
+  - 7.0
