@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<response status="success"><result>
+<job>
+<tenq>11:45:04</tenq>
+<tdeq>11:45:04</tdeq>
+<tlast>11:45:05</tlast>
+<status>FIN</status>
+<id>15845</id>
+</job>
+<log>
+<logs count="6" progress="100">
+<entry logid="123456789">
+<domain>1</domain>
+<receive_time>2016/08/04 11:27:52</receive_time>
+<serial>001606048213</serial>
+<seqno>4359428</seqno>
+<actionflags>0x8000000000000000</actionflags>
+<type>THREAT</type>
+<subtype>vulnerability</subtype>
+<config_ver>0</config_ver>
+<time_generated>2016/08/04 11:27:52</time_generated>
+<src>172.28.4.11</src>
+<dst>1.2.3.4</dst>
+<rule>To ACME</rule>
+<srcloc>172.16.0.0-172.31.255.255</srcloc>
+<dstloc>172.16.0.0-172.31.255.255</dstloc>
+<app>msrpc</app>
+<vsys>vsys1</vsys>
+<from>LAN</from>
+<to>QWERTY VPN</to>
+<inbound_if>ethernet1/3</inbound_if>
+<outbound_if>tunnel</outbound_if>
+<logset>AcmeLogger</logset>
+<time_received>2016/08/04 11:27:52</time_received>
+<sessionid>7982</sessionid>
+<repeatcnt>1</repeatcnt>
+<sport>51162</sport>
+<dport>135</dport>
+<natsport>0</natsport>
+<natdport>0</natdport>
+<flags>0</flags>
+<flag-pcap>no</flag-pcap>
+<flag-flagged>no</flag-flagged>
+<flag-proxy>no</flag-proxy>
+<flag-url-denied>no</flag-url-denied>
+<flag-nat>no</flag-nat>
+<captive-portal>no</captive-portal>
+<exported>no</exported>
+<transaction>no</transaction>
+<pbf-c2s>no</pbf-c2s>
+<pbf-s2c>no</pbf-s2c>
+<temporary-match>no</temporary-match>
+<sym-return>no</sym-return>
+<decrypt-mirror>no</decrypt-mirror>
+<proto>tcp</proto>
+<action>alert</action>
+<cpadding>0</cpadding>
+<threatid>Microsoft RPC Endpoint Mapper</threatid>
+<tid>30845</tid>
+<reportid>0</reportid>
+<category>any</category>
+<severity>informational</severity>
+<direction>client-to-server</direction>
+<url_idx>0</url_idx>
+<padding>0</padding>
+<pcap_id>0</pcap_id>
+</entry>
+</logs>
+</log>
+<meta>
+<devices>
+<entry name="localhost.localdomain">
+<hostname>localhost.localdomain</hostname>
+<vsys>
+<entry name="vsys1">
+<display-name>vsys1</display-name>
+</entry>
+</vsys>
+</entry>
+</devices>
+</meta>

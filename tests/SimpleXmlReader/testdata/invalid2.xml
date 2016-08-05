@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<root>
+	<foo>
+		<bar>
+			<baz>foobarbaz</baz>
+		</bar>
+		<bar>
+			<baz>foobarbaz</bla>
+		</bar>
+	</foo>
+</root>

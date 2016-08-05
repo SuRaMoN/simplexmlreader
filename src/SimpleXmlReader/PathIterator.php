@@ -72,7 +72,12 @@ class PathIterator implements Iterator
     {
         switch ($this->returnType) {
             case SimpleXMLReader::RETURN_DOM:
-                return $this->reader->expand();
+                $expand = @$this->reader->expand();
+                if (false === $expand) {
+                    throw new Exception("Failed to return a copy of the current XML node (invalid XML?)");
+                }
+
+                return $expand;
 
             case SimpleXMLReader::RETURN_INNER_XML_STRING:
                 return $this->reader->readInnerXML();
@@ -81,10 +86,20 @@ class PathIterator implements Iterator
                 return $this->reader->readOuterXML();
 
             case SimpleXMLReader::RETURN_SIMPLE_XML:
-                return simplexml_import_dom($this->reader->expand(new DOMDocument('1.0')));
+                $expanded_dom = @$this->reader->expand(new DOMDocument('1.0'));
+                if (false === $expanded_dom) {
+                    throw new Exception("Failed to return a copy of the current XML node (invalid XML?)");
+                }
+
+                $simplexml = simplexml_import_dom($expanded_dom);
+                if (false === $simplexml) {
+                    throw new Exception("Failed to create a SimpleXMLElement from the current XML node (invalid XML?)");
+                }
+
+                return $simplexml;
 
             default:
-                throw new Exception("Unknow return type: {$this->returnType}");
+                throw new Exception(sprintf("Unknown return type: %s", $this->returnType));
         }
     }
 
@@ -140,6 +155,8 @@ class PathIterator implements Iterator
                 case self::IS_MATCH:
                     return true;
             }
+
+            return false;
         }
     }
 }
