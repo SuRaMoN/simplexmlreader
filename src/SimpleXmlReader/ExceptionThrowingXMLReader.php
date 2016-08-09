@@ -27,24 +27,26 @@ class ExceptionThrowingXMLReader extends XMLReader
 
     public function tryRead()
     {
-        return parent::read();
+        // We're ignoring any PHP errors, as we are trying to read
+        return @parent::read();
     }
 
     public function next($localName = null)
     {
         if (null === $localName) {
             return static::ensureSuccess(parent::next(), 'next');
-        } else {
-            return static::ensureSuccess(parent::next($localName), 'next');
         }
+
+        return static::ensureSuccess(parent::next($localName), 'next');
     }
 
     public function tryNext($localName = null)
     {
+        // We're ignoring any PHP errors, as we are trying to fetch the next element
         if (null === $localName) {
-            return parent::next();
-        } else {
-            return parent::next($localName);
+            return @parent::next();
         }
+
+        return @parent::next($localName);
     }
 }
