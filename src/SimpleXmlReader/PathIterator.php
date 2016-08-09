@@ -3,7 +3,6 @@
 namespace SimpleXmlReader;
 
 use XMLReader;
-use Exception;
 use Iterator;
 use DOMDocument;
 
@@ -58,7 +57,7 @@ class PathIterator implements Iterator
     {
         $this->rewindCount += 1;
         if ($this->rewindCount > 1) {
-            throw new Exception('Multiple rewinds not supported');
+            throw new XmlException('Multiple rewinds not supported');
         }
         $this->next();
     }
@@ -72,12 +71,7 @@ class PathIterator implements Iterator
     {
         switch ($this->returnType) {
             case SimpleXMLReader::RETURN_DOM:
-                $expand = @$this->reader->expand();
-                if (false === $expand) {
-                    throw new Exception("Failed to return a copy of the current XML node (invalid XML?)");
-                }
-
-                return $expand;
+                return $this->reader->expand();
 
             case SimpleXMLReader::RETURN_INNER_XML_STRING:
                 return $this->reader->readInnerXML();
@@ -86,14 +80,9 @@ class PathIterator implements Iterator
                 return $this->reader->readOuterXML();
 
             case SimpleXMLReader::RETURN_SIMPLE_XML:
-                $expanded_dom = @$this->reader->expand(new DOMDocument('1.0'));
-                if (false === $expanded_dom) {
-                    throw new Exception("Failed to return a copy of the current XML node (invalid XML?)");
-                }
-
-                $simplexml = simplexml_import_dom($expanded_dom);
+                $simplexml = simplexml_import_dom($this->reader->expand(new DOMDocument('1.0')));
                 if (false === $simplexml) {
-                    throw new Exception("Failed to create a SimpleXMLElement from the current XML node (invalid XML?)");
+                    throw new XMlException('Failed to create a SimpleXMLElement from the current XML node (invalid XML?)');
                 }
 
                 return $simplexml;

@@ -78,10 +78,10 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
     public function testInvalidXml1()
     {
         $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/invalid1.xml');
-	// No PHP errors should be raised
-	$iterator = $xml->path('root/foo/bar');
-	$result = iterator_to_array($iterator);
-	$this->assertCount(2, $result);
+        // No PHP errors should be raised
+        $iterator = $xml->path('root/foo/bar');
+        $result = iterator_to_array($iterator);
+        $this->assertCount(2, $result);
         foreach ($result as $bar) {
             $this->assertEquals('foobarbaz', (string) $bar->baz);
         }
@@ -91,20 +91,20 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
     public function testInvalidXml2()
     {
         $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/invalid2.xml');
-	// No PHP errors should be raised, but result is empty
-	$iterator = $xml->path('root/foo/bar');
-	$result = iterator_to_array($iterator);
-	$this->assertCount(0, $result);
+        // No PHP errors should be raised, but result is empty
+        $iterator = $xml->path('root/foo/bar');
+        $result = iterator_to_array($iterator);
+        $this->assertCount(0, $result);
     }
 
     /** @test */
     public function testInvalidXml3()
     {
         $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/invalid3.xml');
-	// No PHP errors should be raised, but an exception must be thrown
-	$iterator = $xml->path('response/result/log/logs/entry');
-        $this->setExpectedException('Exception');
-	iterator_to_array($iterator);
+        // No PHP errors should be raised, but an exception must be thrown
+        $iterator = $xml->path('response/result/log/logs/entry');
+        $this->setExpectedException('SimpleXmlReader\XmlException');
+        iterator_to_array($iterator);
     }
 
 }
