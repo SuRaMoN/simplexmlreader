@@ -107,4 +107,73 @@ class PathIteratorTest extends PHPUnit_Framework_TestCase
         iterator_to_array($iterator);
     }
 
+    /** @test */
+    public function testPathCbAttr1OuterXml()
+    {
+        $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/cb.xml');
+        $res = implode('', iterator_to_array($xml->path('root/zoo/animal', SimpleXmlReader::RETURN_OUTER_XML_STRING, function ($xr, $crumbs) {
+            $path = implode("/", $crumbs);
+            if ($path == "root/zoo") {
+                if ($xr->getAttribute('city') != "Banghok") {
+                    return false;
+                }
+            }
+            return true;
+        })));
+        $this->assertEquals('<animal>kakariki</animal>', preg_replace('/\s/', '', (string) $res));
+    }
+
+     /** @test */
+    public function testPathCbAttr2OuterXml()
+    {
+        $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/cb.xml');
+        $res = implode('', iterator_to_array($xml->path('root/zoo/animal', SimpleXmlReader::RETURN_OUTER_XML_STRING, function ($xr, $crumbs) {
+            $path = implode("/", $crumbs);
+            if ($path == "root/zoo") {
+                if ($xr->getAttribute('contenent') != "Europe") {
+                    return false;
+                }
+            }
+            return true;
+        })));
+        $this->assertEquals('<animal>cat</animal><animal>bear</animal>', preg_replace('/\s/', '', (string) $res));
+    }
+
+    /** @test */
+    public function testPathCbElemOuterXml()
+    {
+        $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/cb.xml');
+        $res = implode('', iterator_to_array($xml->path('root/zoo/animal', SimpleXmlReader::RETURN_OUTER_XML_STRING, function ($xr, $crumbs) {
+            $path = implode("/", $crumbs);
+            if ($path == "root/zoo/work") {
+                if ($xr->readString() != "yes") {
+                    return false;
+                }
+            }
+            return true;
+        })));
+        //echo $res;
+        $this->assertEquals('<animal>kakariki</animal><animal>bear</animal>', preg_replace('/\s/', '', (string) $res));
+    }
+
+    /** @test */
+    public function testPathCbElemAttrOuterXml()
+    {
+        $xml = SimpleXmlReader::openXML(__DIR__ . '/testdata/cb.xml');
+        $res = implode('', iterator_to_array($xml->path('root/zoo/animal', SimpleXmlReader::RETURN_OUTER_XML_STRING, function ($xr, $crumbs) {
+            $path = implode("/", $crumbs);
+            if ($path == "root/zoo") {
+                if ($xr->getAttribute('contenent') != "Europe") {
+                    return false;
+                }
+            } elseif ($path == "root/zoo/work") {
+                if ($xr->readString() != "yes") {
+                    return false;
+                }
+            }
+            return true;
+        })));
+        //echo $res;
+        $this->assertEquals('<animal>bear</animal>', preg_replace('/\s/', '', (string) $res));
+    }
 }

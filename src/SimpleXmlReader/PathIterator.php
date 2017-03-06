@@ -21,7 +21,12 @@ class PathIterator implements Iterator
     protected $isValid;
     protected $returnType;
 
-    public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType)
+    /*
+     * Filtering callback function
+     */
+    protected $callback;
+
+    public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType, $callback = null)
     {
         $this->reader = $reader;
         $this->searchPath = $path;
@@ -31,6 +36,7 @@ class PathIterator implements Iterator
         $this->rewindCount = 0;
         $this->isValid = false;
         $this->returnType = $returnType;
+        $this->callback = $callback;
     }
 
     public function current()
@@ -131,7 +137,18 @@ class PathIterator implements Iterator
             // fill crumbs
             array_splice($this->crumbs, $r->depth, count($this->crumbs), array($r->name));
 
-            switch ($this->pathIsMatching()) {
+            $matching = $this->pathIsMatching();
+
+            $uf = false;
+            if ($this->callback && is_callable($this->callback)
+                && !call_user_func_array($this->callback, [$r, $this->crumbs])) {
+                $uf = true;
+                $sd = count($this->searchCrumbs) - 1;
+                if ($sd == $r->depth) { $sd--; }
+                $matching = self::DESCENDANTS_CANT_MATCH;
+            }
+
+            switch ($matching) {
 
                 case self::DESCENDANTS_COULD_MATCH:
                     if (! $r->tryRead()) { return false; }
@@ -139,6 +156,11 @@ class PathIterator implements Iterator
 
                 case self::DESCENDANTS_CANT_MATCH:
                     if (! $r->tryNext()) { return false; }
+                    if ($uf) {
+                        while ($r->depth > $sd) {
+                            if (! $r->tryNext()) { return false; }
+                        }
+                    }
                     continue 2;
 
                 case self::IS_MATCH:
