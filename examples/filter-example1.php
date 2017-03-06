@@ -19,7 +19,7 @@ $xml = SimpleXmlReader::openFromString('
  </root>
 ');
 
-foreach ($xml->path('root/animal', SimpleXMLReader::RETURN_SIMPLE_XML, function ($xr, $crumbs) {
+foreach ($xml->path('root/animal', SimpleXmlReader::RETURN_SIMPLE_XML, function ($xr, $crumbs) {
     $path = implode("/", $crumbs);
     if ($path == "root/animal") {
         if (! in_array($xr->getAttribute('type'), ['dog', 'cat'])) {
