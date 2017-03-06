@@ -2,6 +2,8 @@
 
 namespace SimpleXmlReader;
 
+use SimpleXmlReader\PathIterator;
+
 require(__DIR__ . '/../src/SimpleXmlReader/autoload.php');
 
 
@@ -29,10 +31,10 @@ foreach ($xml->path('root/group/animal', SimpleXmlReader::RETURN_SIMPLE_XML, fun
     $path = implode("/", $crumbs);
     if ($path == "root/group/type") {
         if ($xr->readString() != 'pet') {
-            return false;
+            return PathIterator::SIBLINGS_ARE_INVALID;
         }
     }
-    return true;
+    return PathIterator::ELEMENT_IS_VALID;
 }) as $animal) {
     echo "A {$animal->attributes()->type} has a tail? {$animal->hastail}!\n";
 }

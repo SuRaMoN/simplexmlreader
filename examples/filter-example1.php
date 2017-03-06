@@ -2,6 +2,8 @@
 
 namespace SimpleXmlReader;
 
+use SimpleXmlReader\PathIterator;
+
 require(__DIR__ . '/../src/SimpleXmlReader/autoload.php');
 
 
@@ -22,11 +24,11 @@ $xml = SimpleXmlReader::openFromString('
 foreach ($xml->path('root/animal', SimpleXmlReader::RETURN_SIMPLE_XML, function ($xr, $crumbs) {
     $path = implode("/", $crumbs);
     if ($path == "root/animal") {
-        if (! in_array($xr->getAttribute('type'), ['dog', 'cat'])) {
-            return false;
+        if (! in_array($xr->getAttribute('type'), ['dog', 'kakariki'])) {
+            return PathIterator::ELEMENT_IS_INVALID;
         }
     }
-    return true;
+    return PathIterator::ELEMENT_IS_VALID;
 }) as $animal) {
     echo "A {$animal->attributes()->type} has a tail? {$animal->hastail}!\n";
 }
