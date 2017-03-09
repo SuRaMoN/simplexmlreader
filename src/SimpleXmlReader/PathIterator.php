@@ -165,7 +165,14 @@ class PathIterator implements Iterator
             $uf = self::ELEMENT_IS_VALID;
             if ($this->callback && is_callable($this->callback)
                 && ($uf = call_user_func_array($this->callback, [$r, $this->crumbs])) !== self::ELEMENT_IS_VALID) {
+
+                // extra check for sanity of a value returned by the user filter
+                if ($uf !== self::SIBLINGS_ARE_INVALID && $uf !== self::ELEMENT_IS_INVALID ) {
+                    $uf = self::ELEMENT_IS_INVALID;
+                }
+
                 $df = $r->depth;
+
                 if ($uf === self::SIBLINGS_ARE_INVALID) { $df--; }
                 $matching = self::DESCENDANTS_CANT_MATCH;
             }
