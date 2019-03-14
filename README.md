@@ -31,5 +31,6 @@ foreach($xml->path('root/animal') as $animal) {
 	// $animal is of type SimpleXMLElelent
 	// only the current iterated $animal is in memory, so huge xml files can be read, without much memory consumption
 	echo "A {$animal->attributes()->type} has a tail? {$animal->hastail}!\n";
-} 
+}
+ 
 ```

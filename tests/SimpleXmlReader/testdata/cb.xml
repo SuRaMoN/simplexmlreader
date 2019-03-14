@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <zoo city="Moscow" contenent="Europe">
+        <work>no</work>
+        <animal>cat</animal>
+    </zoo>
+    <zoo city="Banghok" contenent="Asia">
+        <work>yes</work>
+        <animal>kakariki</animal>
+    </zoo>
+    <zoo city="Praha" contenent="Europe">
+        <work>yes</work>
+        <animal>bear</animal>
+    </zoo>
+</root>

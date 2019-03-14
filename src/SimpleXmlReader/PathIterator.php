@@ -12,6 +12,22 @@ class PathIterator implements Iterator
     const DESCENDANTS_COULD_MATCH = 'DESCENDANTS_COULD_MATCH';
     const DESCENDANTS_CANT_MATCH = 'DESCENDANTS_CANT_MATCH';
 
+    /*
+     * The list of return codes for filtering callback function
+     */
+    /*
+     * Valid elem, no filtering.
+     */
+    const ELEMENT_IS_VALID = 1; // elem
+    /*
+     * Invalid elem and its descendants, so have to be filtered out.
+     */
+    const ELEMENT_IS_INVALID = 2;
+    /*
+     * The same as `ELEMENT_IS_INVALID`. Additionaly after it sibling elems(and its descendants) have to be filtered out too.
+     */
+    const SIBLINGS_ARE_INVALID = 3;
+
     protected $reader;
     protected $searchPath;
     protected $searchCrumbs;
@@ -21,7 +37,12 @@ class PathIterator implements Iterator
     protected $isValid;
     protected $returnType;
 
-    public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType)
+    /*
+     * Filtering callback function
+     */
+    protected $callback;
+
+    public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType, $callback = null)
     {
         $this->reader = $reader;
         $this->searchPath = $path;
@@ -31,6 +52,7 @@ class PathIterator implements Iterator
         $this->rewindCount = 0;
         $this->isValid = false;
         $this->returnType = $returnType;
+        $this->callback = $callback;
     }
 
     public function current()
@@ -110,6 +132,15 @@ class PathIterator implements Iterator
         return self::DESCENDANTS_COULD_MATCH;
     }
 
+    protected function searchForOpenTag(XMLReader $r)
+    {
+        // search for open tag
+        while ($r->nodeType != XMLReader::ELEMENT) {
+            if (! $r->tryRead()) { return false; }
+        }
+        return true;
+    }
+
     public function tryGotoNextIterationElement()
     {
         $r = $this->reader;
@@ -124,21 +155,44 @@ class PathIterator implements Iterator
 
         while (true) {
             // search for open tag
-            while ($r->nodeType != XMLReader::ELEMENT) {
-                if (! $r->tryRead()) { return false; }
-            }
+            if (! $this->searchForOpenTag($r)) { return false; }
 
             // fill crumbs
             array_splice($this->crumbs, $r->depth, count($this->crumbs), array($r->name));
 
-            switch ($this->pathIsMatching()) {
+            $matching = $this->pathIsMatching();
+
+            $uf = self::ELEMENT_IS_VALID;
+            if ($this->callback && is_callable($this->callback)
+                && ($uf = call_user_func_array($this->callback, array($r, $this->crumbs))) !== self::ELEMENT_IS_VALID) {
+
+                // extra check for sanity of a value returned by the user filter
+                if ($uf !== self::SIBLINGS_ARE_INVALID && $uf !== self::ELEMENT_IS_INVALID ) {
+                    $uf = self::ELEMENT_IS_INVALID;
+                }
+
+                $df = $r->depth;
+
+                if ($uf === self::SIBLINGS_ARE_INVALID) { $df--; }
+                $matching = self::DESCENDANTS_CANT_MATCH;
+            }
+
+            switch ($matching) {
 
                 case self::DESCENDANTS_COULD_MATCH:
                     if (! $r->tryRead()) { return false; }
                     continue 2;
 
                 case self::DESCENDANTS_CANT_MATCH:
+
                     if (! $r->tryNext()) { return false; }
+                    if ($uf !== self::ELEMENT_IS_VALID) {
+                        if (! $this->searchForOpenTag($r)) { return false; }
+                        while ($r->depth > $df) {
+                            if (! $r->tryNext()) { return false; }
+                            if (! $this->searchForOpenTag($r)) { return false; }
+                        }
+                    }
                     continue 2;
 
                 case self::IS_MATCH:
